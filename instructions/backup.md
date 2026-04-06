@@ -11,7 +11,15 @@ Action:
 
 Commit message format:
 ```
-<short description of changes made>
+<type>(<optional scope>): <short, imperative description of the change>
 
-<optional detailed description>
+<Detailed explanation of the change:
+- Why was this change necessary?
+- How does it address the problem?
+- What are the specific effects of this change?>
 ```
+
+Guidelines:
+- **Type**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, or `chore`.
+- **Subject**: Use the imperative mood (e.g., "add feature", not "added feature" or "adds feature"). Keep it under 50 characters.
+- **Body**: Wrap text at 72 characters. Focus on the "why" and "what" rather than the "how".
