@@ -9,3 +9,4 @@
 | File | Purpose |
 |------|---------|
 | `instructions/backup.md` | Backup claude-worker folder — git stage and commit |
+| `instructions/create-instruction.md` | Create or add new instruction/SOP documents |
