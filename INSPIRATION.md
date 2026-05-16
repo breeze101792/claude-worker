@@ -13,3 +13,5 @@ Hit this index when you're stuck, need examples, or want to see what's been coll
 | File | Purpose |
 |------|---------|
 | `inspiration/occasions.md` | Real-world situations where English is needed |
+| `inspiration/occupations.md` | Professional lenses — how would different professions approach this? |
+| `inspiration/personalities.md` | Thinking lenses — adopt a different persona to shift perspective |
