@@ -7,10 +7,30 @@
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-pro:cloud",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "minimax-m3:cloud"
   },
+  "sandbox": {
+      "enabled": true,
+      "filesystem": {
+          "allowWrite": ["~/.npm-global", "/tmp/claude"]
+      }
+  },
   "permissions": {
     "allow": [
-      "WebFetch"
+        "WebFetch",
+        "Bash(npm run lint)",
+        "Bash(npm run test *)"
+    ],
+    "deny": [
+        "Read(./.env)",
+        "Read(./.env.*)",
+        "Read(./secrets/**)",
+        "Bash(rm -rf *)",
+        "Bash(git push --force *)"
     ]
+  },
+  "attribution": {
+      "coAuthoredBy": false,
+      "commit": "",
+      "pr": ""
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
@@ -19,5 +39,7 @@
     "security-guidance@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true
   },
-  "effortLevel": "xhigh"
+  "effortLevel": "xhigh",
+  "terminalTitleFromRename": false
+
 }
