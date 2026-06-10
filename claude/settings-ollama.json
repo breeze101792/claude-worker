@@ -26,7 +26,7 @@
             "Read(./.env.*)",
             "Read(./secrets/**)",
             "Bash(rm -rf *)",
-            "Bash(git push --force *)"
+            "Bash(git push *)"
         ]
     },
     "attribution": {
