@@ -1,47 +1,65 @@
 {
-    "env": {
-        "ANTHROPIC_AUTH_TOKEN": "ollama",
-        "ANTHROPIC_API_KEY": "",
-        "ANTHROPIC_BASE_URL": "http://localhost:11434",
-        "ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek-v4-flash:cloud",
-        "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-pro:cloud",
-        "ANTHROPIC_DEFAULT_OPUS_MODEL": "minimax-m3:cloud"
-    },
-    "sandbox": {
-        "enabled": true,
-        "filesystem": {
-            "allowWrite": ["~/.npm-global", "/tmp/claude"]
-        }
-    },
-    "permissions": {
-        "_comment": "default mode could be default, acceptEdits, bypassPermissions",
-        "defaultMode": "acceptEdits",
-        "allow": [
-            "WebFetch",
-            "Bash(npm run lint)",
-            "Bash(npm run test *)"
-        ],
-        "deny": [
-            "Read(./.env)",
-            "Read(./.env.*)",
-            "Read(./secrets/**)",
-            "Bash(rm -rf *)",
-            "Bash(git push *)"
-        ]
-    },
-    "attribution": {
-        "coAuthoredBy": false,
-        "commit": "",
-        "pr": ""
-    },
-    "enabledPlugins": {
-        "frontend-design@claude-plugins-official": true,
-        "feature-dev@claude-plugins-official": true,
-        "code-review@claude-plugins-official": true,
-        "security-guidance@claude-plugins-official": true,
-        "commit-commands@claude-plugins-official": true
-    },
-    "effortLevel": "xhigh",
-    "terminalTitleFromRename": false
-
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "ollama",
+    "ANTHROPIC_API_KEY": "",
+    "ANTHROPIC_BASE_URL": "http://localhost:11434",
+    "ANTHROPIC_MODEL": "glm-5.2:cloud",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek-v4-flash:cloud",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-pro:cloud",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "minimax-m3:cloud",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "950000",
+    "_comment": "512000 for minimax-m3, 950000 for glm-5.2"
+  },
+  "model": "opus",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "allow": [
+      "WebFetch",
+      "Bash(npm run lint)",
+      "Bash(npm run test *)"
+    ],
+    "deny": [
+      "Read(~/.bashrc)",
+      "Read(~/.zshrc)",
+      "Read(~/.bash*)",
+      "Read(~/.zsh*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Bash(rm -rf *)",
+      "Bash(git push *)"
+    ],
+    "defaultMode": "acceptEdits",
+    "_comment": "default mode could be default, acceptEdits, bypassPermissions"
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "setupdotclaude@dotclaude": true
+  },
+  "extraKnownMarketplaces": {
+    "dotclaude": {
+      "source": {
+        "source": "github",
+        "repo": "poshan0126/dotclaude"
+      }
+    }
+  },
+  "sandbox": {
+    "enabled": true,
+    "filesystem": {
+      "allowWrite": [
+        "~/.npm-global",
+        "/tmp/claude"
+      ]
+    }
+  },
+  "terminalTitleFromRename": false
 }
