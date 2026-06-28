@@ -17,7 +17,7 @@
         "_comment": "default mode could be default, acceptEdits, bypassPermissions",
         "defaultMode": "acceptEdits",
         "allow": [
-            "WebFetch",
+            "WebFetch(*)",
             "Bash(npm run lint)",
             "Bash(npm run test *)"
         ],
