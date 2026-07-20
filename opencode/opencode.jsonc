@@ -19,6 +19,7 @@
             "/tmp/**": "allow"
         }
     },
+    "lsp": true,
     "provider": {
         "ollama": {
             "npm": "@ai-sdk/openai-compatible",

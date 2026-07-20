@@ -26,8 +26,8 @@ Commands:
   pull              Pull all required ollama models (claude)
   link [TOOLS]      Symlink tool settings to the right paths.
                     TOOLS is a comma-separated list to link
-                    (default: claude). Available: claude, opencode
-                    Example: link opencode
+                    (default: opencode). Available: claude, opencode
+                    Example: link claude
   all [TOOLS]       Run pull + link (default if no command given)
   help              Show this help message
 
@@ -36,7 +36,7 @@ Options:
 
 Examples:
   $(basename "$0") link
-  $(basename "$0") link opencode
+  $(basename "$0") link claude
   $(basename "$0") link claude,opencode
   $(basename "$0") all claude,opencode
   $(basename "$0") all claude --dry-run
@@ -55,6 +55,39 @@ resolve_tool() {
     opencode) echo "$TOOL_OPENCODE_SRC|$TOOL_OPENCODE_DST" ;;
     *) err "Unknown tool: $name (available: claude, opencode)"; return 1 ;;
   esac
+}
+
+# LSP tools that must be installed manually on the host.
+# (opencode auto-installs: clangd, bash-language-server, lua-ls.
+#  Project-scoped npm deps: typescript, pyright — not checked here.)
+# Format: "binary|opencode_server_label|install_hint"
+LSP_DEPS=(
+  "go|gopls|Install Go: brew install go  (or apt: golang-go)"
+  "rust-analyzer|rust|Install rust-analyzer: brew install rust-analyzer  (or: rustup component add rust-analyzer)"
+)
+
+# Print a report of missing LSP toolchains for opencode.
+check_lsp_deps() {
+  local missing=0
+  info "Checking LSP toolchains for opencode..."
+  for entry in "${LSP_DEPS[@]}"; do
+    IFS='|' read -r bin label hint <<< "$entry"
+    if command -v "$bin" >/dev/null 2>&1; then
+      info "  [OK]      $bin (opencode server: $label)"
+    else
+      warn "  [MISSING] $bin (opencode server: $label)"
+      warn "            -> $hint"
+      missing=$((missing+1))
+    fi
+  done
+  if [[ $missing -gt 0 ]]; then
+    echo "" >&2
+    warn "$missing LSP toolchain(s) missing. opencode will not start those servers until installed."
+    warn "Auto-installing servers (clangd, bash, lua-ls) is enabled by default."
+    warn "Disable with: export OPENCODE_DISABLE_LSP_DOWNLOAD=true"
+  else
+    info "All host-required LSP toolchains present."
+  fi
 }
 
 cmd_pull() {
@@ -140,16 +173,25 @@ parse_tools() {
 
 cmd_link() {
   local dry_run="${1:-}"
-  local tool_spec="${LINK_TOOLS:-claude}"
+  local tool_spec="${LINK_TOOLS:-opencode}"
 
   parse_tools "$tool_spec" || return 1
 
   local failed=0
+  local opencode_linked=false
   for tool in "${TOOLS[@]}"; do
     if ! link_one "$tool" "$dry_run"; then
       failed=$((failed+1))
+    elif [[ "$tool" == "opencode" && "$dry_run" != "--dry-run" ]]; then
+      opencode_linked=true
     fi
   done
+
+  # Only run the LSP check on a real (non-dry-run) opencode link
+  if [[ "$opencode_linked" == "true" ]]; then
+    check_lsp_deps
+  fi
+
   return $failed
 }
 
