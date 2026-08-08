@@ -5,6 +5,7 @@
 ## Rules
 
 1. **Plain English.** Write opencode markdown files in concise, accurate, plain English: short declarative sentences, no metaphors, specific words over general ones.
+2. **Traditional Chinese only.** If output is Chinese, output in Traditional Chinese (zh-Hant), not Simplified Chinese. This applies to all output, not just markdown.
 
 ## Subagents
 
