@@ -1,10 +1,12 @@
 {
     "$schema": "https://opencode.ai/config.json",
+    "model": "opencode/deepseek-v4-flash-free",
     "permission": {
         "bash": {
             "sudo *": "ask",
             "rm -rf *": "deny",
-            "git push *": "deny"
+            "git commit *": "ask",
+        "git push *": "deny"
         },
         "read": {
             "~/.bashrc": "deny",
@@ -20,10 +22,15 @@
         }
     },
     "lsp": true,
+    "compaction": {
+        "auto": true,
+        "prune": true,
+        "reserved": 20000
+    },
     "provider": {
         "ollama": {
             "npm": "@ai-sdk/openai-compatible",
-            "name": "Ollama (local)",
+            "name": "Ollama (NAS)",
             "options": {
                 "baseURL": "http://10.31.1.9:30068/v1"
             },
@@ -40,13 +47,6 @@
                     "reasoning": true,
                     "limit": { "context": 1048576, "output": 32768 }
                 },
-                "kimi-k2.7-code:cloud": {
-                    "name": "Kimi K2.7 Code",
-                    "attachment": true,
-                    "tool_call": true,
-                    "reasoning": true,
-                    "limit": { "context": 262144, "output": 16384 }
-                },
                 "glm-5.2:cloud": {
                     "name": "GLM 5.2",
                     "tool_call": true,
@@ -59,6 +59,13 @@
                     "tool_call": true,
                     "reasoning": true,
                     "limit": { "context": 524288, "output": 16384 }
+                },
+                "kimi-k2.7-code:cloud": {
+                    "name": "Kimi K2.7 Code",
+                    "attachment": true,
+                    "tool_call": true,
+                    "reasoning": true,
+                    "limit": { "context": 262144, "output": 16384 }
                 }
             }
         }

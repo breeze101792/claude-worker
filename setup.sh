@@ -3,12 +3,20 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Tool registry: name -> "source_relative_to_script|destination_path"
+# Tool registry: name -> one "source|destination|type" line per link target.
 # Add new tools here.
+#   type=file: symlink a single file
+#   type=dir:  symlink a directory (created in-repo if missing)
 TOOL_CLAUDE_SRC="$SCRIPT_DIR/claude/settings-ollama.json"
 TOOL_CLAUDE_DST="$HOME/.claude/settings.json"
 TOOL_OPENCODE_SRC="$SCRIPT_DIR/opencode/opencode.jsonc"
 TOOL_OPENCODE_DST="$HOME/.config/opencode/opencode.jsonc"
+TOOL_OPENCODE_AGENTS_SRC="$SCRIPT_DIR/opencode/agents"
+TOOL_OPENCODE_AGENTS_DST="$HOME/.config/opencode/agents"
+TOOL_OPENCODE_SKILLS_SRC="$SCRIPT_DIR/opencode/skills"
+TOOL_OPENCODE_SKILLS_DST="$HOME/.config/opencode/skills"
+TOOL_OPENCODE_COMMANDS_SRC="$SCRIPT_DIR/opencode/commands"
+TOOL_OPENCODE_COMMANDS_DST="$HOME/.config/opencode/commands"
 
 MODELS=(
   "deepseek-v4-flash:cloud"
@@ -47,12 +55,18 @@ info()  { echo "[INFO]  $*"; }
 warn()  { echo "[WARN]  $*" >&2; }
 err()   { echo "[ERROR] $*" >&2; }
 
-# Resolve a tool name to "src|dst". Returns 1 if unknown.
+# Resolve a tool name to "src|dst|type" lines (one per link target).
+# Returns 1 if unknown.
 resolve_tool() {
   local name="$1"
   case "$name" in
-    claude)   echo "$TOOL_CLAUDE_SRC|$TOOL_CLAUDE_DST" ;;
-    opencode) echo "$TOOL_OPENCODE_SRC|$TOOL_OPENCODE_DST" ;;
+    claude)   echo "$TOOL_CLAUDE_SRC|$TOOL_CLAUDE_DST|file" ;;
+    opencode)
+      echo "$TOOL_OPENCODE_SRC|$TOOL_OPENCODE_DST|file"
+      echo "$TOOL_OPENCODE_AGENTS_SRC|$TOOL_OPENCODE_AGENTS_DST|dir"
+      echo "$TOOL_OPENCODE_SKILLS_SRC|$TOOL_OPENCODE_SKILLS_DST|dir"
+      echo "$TOOL_OPENCODE_COMMANDS_SRC|$TOOL_OPENCODE_COMMANDS_DST|dir"
+      ;;
     *) err "Unknown tool: $name (available: claude, opencode)"; return 1 ;;
   esac
 }
@@ -106,19 +120,25 @@ cmd_pull() {
   $dry_run || info "All models pulled."
 }
 
-# Link one tool. Args: <tool_name> [--dry-run]
+# Link one src|dst|type entry. Args: <tool_name> <src> <dst> <type> [--dry-run]
 link_one() {
   local tool="$1"
-  local dry_run="${2:-}"
+  local src="$2"
+  local dst="$3"
+  local type="$4"
+  local dry_run="${5:-}"
 
-  local pair src dst
-  if ! pair="$(resolve_tool "$tool")"; then
-    return 1
-  fi
-  src="${pair%|*}"
-  dst="${pair#*|}"
+  local is_dir=false
+  [[ "$type" == "dir" ]] && is_dir=true
 
-  if [[ ! -e "$src" && ! -L "$src" ]]; then
+  # A dir source is created in-repo if missing so the symlink always resolves.
+  if $is_dir && [[ ! -e "$src" && ! -L "$src" ]]; then
+    if [[ "$dry_run" == "--dry-run" ]]; then
+      info "Would create source dir: $src"
+    else
+      mkdir -p "$src"
+    fi
+  elif [[ ! -e "$src" && ! -L "$src" ]]; then
     err "Source not found for $tool: $src"
     return 1
   fi
@@ -137,7 +157,7 @@ link_one() {
         rm "$dst"
       fi
     else
-      warn "Existing file at $dst (not a symlink). Backing up to ${dst}.bak"
+      warn "Existing file/directory at $dst (not a symlink). Backing up to ${dst}.bak"
       if [[ "$dry_run" == "--dry-run" ]]; then
         info "Would back up: $dst -> ${dst}.bak"
         return 0
@@ -150,9 +170,31 @@ link_one() {
     info "Would link ($tool): $dst -> $src"
   else
     mkdir -p "$(dirname "$dst")"
-    ln -sf "$src" "$dst"
+    ln -sfn "$src" "$dst"
     info "Linked ($tool): $dst -> $src"
   fi
+}
+
+# Link one tool. Args: <tool_name> [--dry-run]
+link_tool() {
+  local tool="$1"
+  local dry_run="${2:-}"
+
+  local pairs failed=0
+  if ! pairs="$(resolve_tool "$tool")"; then
+    return 1
+  fi
+
+  while IFS= read -r pair; do
+    [[ -z "$pair" ]] && continue
+    local src dst type
+    IFS='|' read -r src dst type <<< "$pair"
+    if ! link_one "$tool" "$src" "$dst" "$type" "$dry_run"; then
+      failed=$((failed+1))
+    fi
+  done <<< "$pairs"
+
+  return $failed
 }
 
 # Parse a comma-separated tool list into an array.
@@ -180,7 +222,7 @@ cmd_link() {
   local failed=0
   local opencode_linked=false
   for tool in "${TOOLS[@]}"; do
-    if ! link_one "$tool" "$dry_run"; then
+    if ! link_tool "$tool" "$dry_run"; then
       failed=$((failed+1))
     elif [[ "$tool" == "opencode" && "$dry_run" != "--dry-run" ]]; then
       opencode_linked=true
