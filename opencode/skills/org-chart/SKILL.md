@@ -1,6 +1,6 @@
 ---
 name: org-chart
-description: The HR department playbook. Use when interviewing the user about hiring agents, recruiting new team members, generating a new opencode agent or subagent, validating agent files, or updating the org roster. Load this skill before creating, editing, or reviewing any agent definition.
+description: The HR department playbook. Use when interviewing the user about hiring agents, recruiting new team members, generating a new opencode agent or subagent, or validating agent files. Load this skill before creating, editing, or reviewing any agent definition.
 ---
 
 # Org Chart — The Agent Company
@@ -15,12 +15,12 @@ opencode starts cleanly.
 org (user's agent company)
 └── HR department
     ├── hr         (primary) head of people — interviews, proposes, approves
-    └── recruiter  (subagent) — writes the hire file, updates the roster
-└── team members (subagents) — tester, + anything the HR department hires
+    └── recruiter  (subagent) — writes the hire file
 ```
 
-The whole org is tracked in the roster: `opencode/org/ROSTER.md` in the org
-repo. Read it before hiring so you never duplicate a role or a name.
+The org keeps no separate roster file. The existing team is whatever agent
+files exist — list the agents directories (glob) before hiring so you never
+duplicate a role or a name.
 
 ## Where hires live
 
@@ -82,39 +82,39 @@ into `options` — avoid it. Rules:
 
 1. **Interview.** `hr` talks to the user: what are they building, what's
    stuck, which team member is missing. From the current project (manifests,
-   source), `USER.md`, and the roster, propose a list of role(s). Never invent
-   a tool or permission the user didn't mention.
+   source), `USER.md`, and the existing agents, propose a list of role(s).
+   Never invent a tool or permission the user didn't mention.
 2. **Propose.** Deliver candidate hires as a shortlist: name, role, model,
    mode, permissions, location (project or global), and the job description
-   (the body). Update it against the roster — no duplicate names or duped
-   roles.
+   (the body). Check against the existing agents — no duplicate names or
+   duplicated roles.
 3. **One-click approval.** Put the final shortlist in a `question` tool call
    with a single "Approve hires" option — the user clicks once and then it
    generates. Do not write a file before that click. If the user rejects with
    edits, adjust and re-confirm exactly once, then proceed.
 4. **Generate.** `hr` passes the approved shortlist to the `recruiter`
    subagent via the task tool. The `recruiter` writes one valid `<name>.md`
-   per hire, then updates `ROSTER.md`.
+   per hire.
 5. **Validate.** Re-read every written file and run the checklist below.
 6. **Report + restart.** Show a summary and tell the user to quit and restart
-   opencode — config loads once; hires activate only after restart. Already
-   -roster rows that are not yet active.
+   opencode — config loads once; hires activate only after restart.
 
-## Roster format
+## Discover the existing team
 
-`opencode/org/ROSTER.md` — single markdown table from the `## Team` header on,
-one row per agent:
+The source of truth for who is already hired is the filesystem. Before
+proposing or writing:
 
-| Agent | Role | Mode | Model | Permissions | Hire | Status |
+- Glob for agent files: `**/.opencode/agent/**/*.md`, `**/.opencode/agents/**/*.md`,
+  and the org repo's `opencode/agents/*.md`.
+- Read the `description`, `mode`, and `model` of the members you find (e.g.
+  `tester`, `hr`, `recruiter` already exist — never rehire them).
 
-When hiring, append a row. Never remove rows; statuses change to
-`retired`/`archived` if a member is decommissioned. Active = loaded, will be
-active = awaiting restart.
+Hires awaiting a restart exist only as files too — there is no separate state.
 
 ## Guardrails / hire checklist
 
 - Load this skill first when hiring or reviewing an agent.
-- Read `ROSTER.md` and list existing agents before proposing — no duplicates.
+- List the existing agent files before proposing — no duplicates.
 - Never overwrite an existing agent file without asking.
 - Validate: mode in `primary|subagent|all`; model has a provider prefix;
   `description` present; `prompt` never a frontmatter key; file name =
