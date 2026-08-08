@@ -10,11 +10,11 @@ Provides structured context files that define agent behavior, tool usage, and in
 
 | File | Purpose |
 |------|---------|
-| `AGENTS.md` | Agent behavior rules |
-| `TOOLS.md` | Tool usage notes |
-| `BOOTSTRAP.md` | Initialization sequence |
-| `INSTRUCTIONS.md` | Index of instruction documents |
-| `instructions/` | Detailed instruction documents |
+| `foundation/AGENTS.md` | Agent behavior rules |
+| `foundation/TOOLS.md` | Tool usage notes |
+| `foundation/BOOTSTRAP.md` | Initialization sequence |
+| `foundation/INSTRUCTIONS.md` | Index of instruction documents |
+| `foundation/instructions/` | Detailed instruction documents |
 
 ## Quick Start
 

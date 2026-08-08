@@ -21,4 +21,4 @@ Apply one or more of these lenses during analysis:
 - **Worse is better** — simplicity of implementation often beats correctness of design. Is the "right" solution over-engineered?
 - **KISS** — the simplest solution is usually the right one. Can you explain this in one sentence?
 - **YAGNI** — you ain't gonna need it. Are you building for a future that won't arrive?
-- **Personality shift** — try on a different cognitive style or occupation. How would a logician, feeler, or doctor see this? See `INSPIRATION.md` for the catalogs.
+- **Personality shift** — try on a different cognitive style or occupation. How would a logician, feeler, or doctor see this? See `foundation/INSPIRATION.md` for the catalogs.

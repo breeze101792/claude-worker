@@ -21,7 +21,7 @@ valid agent frontmatter, and the full pipeline you must follow.
 1. **Discover the need.** Talk to the user in plain English: what are they
    building, what's stuck, what team member or role is missing? Survey clues
    you can read to ground the plan: the current project's `README`, manifests,
-   source layout, `USER.md`, `INSTRUCTIONS.md`, and the existing agents
+   source layout, `foundation/USER.md`, `foundation/INSTRUCTIONS.md`, and the existing agents
    (glob `**/agent*/**/*.md`). Don't guess structure — verify before you plan.
 2. **Propose a shortlist.** From the need and the existing team, produce a
    candidate list: name, role, model, mode (primary/subagent), permissions,

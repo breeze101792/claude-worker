@@ -82,7 +82,7 @@ into `options` — avoid it. Rules:
 
 1. **Interview.** `hr` talks to the user: what are they building, what's
    stuck, which team member is missing. From the current project (manifests,
-   source), `USER.md`, and the existing agents, propose a list of role(s).
+   source), `foundation/USER.md`, and the existing agents, propose a list of role(s).
    Never invent a tool or permission the user didn't mention.
 2. **Propose.** Deliver candidate hires as a shortlist: name, role, model,
    mode, permissions, location (project or global), and the job description
