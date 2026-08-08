@@ -11,6 +11,8 @@ TOOL_CLAUDE_SRC="$SCRIPT_DIR/claude/settings-ollama.json"
 TOOL_CLAUDE_DST="$HOME/.claude/settings.json"
 TOOL_OPENCODE_SRC="$SCRIPT_DIR/opencode/opencode.jsonc"
 TOOL_OPENCODE_DST="$HOME/.config/opencode/opencode.jsonc"
+TOOL_OPENCODE_AGENTSMD_SRC="$SCRIPT_DIR/opencode/AGENTS.md"
+TOOL_OPENCODE_AGENTSMD_DST="$HOME/.config/opencode/AGENTS.md"
 TOOL_OPENCODE_AGENTS_SRC="$SCRIPT_DIR/opencode/agents"
 TOOL_OPENCODE_AGENTS_DST="$HOME/.config/opencode/agents"
 TOOL_OPENCODE_SKILLS_SRC="$SCRIPT_DIR/opencode/skills"
@@ -63,6 +65,7 @@ resolve_tool() {
     claude)   echo "$TOOL_CLAUDE_SRC|$TOOL_CLAUDE_DST|file" ;;
     opencode)
       echo "$TOOL_OPENCODE_SRC|$TOOL_OPENCODE_DST|file"
+      echo "$TOOL_OPENCODE_AGENTSMD_SRC|$TOOL_OPENCODE_AGENTSMD_DST|file"
       echo "$TOOL_OPENCODE_AGENTS_SRC|$TOOL_OPENCODE_AGENTS_DST|dir"
       echo "$TOOL_OPENCODE_SKILLS_SRC|$TOOL_OPENCODE_SKILLS_DST|dir"
       echo "$TOOL_OPENCODE_COMMANDS_SRC|$TOOL_OPENCODE_COMMANDS_DST|dir"
