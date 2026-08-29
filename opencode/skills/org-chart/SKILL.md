@@ -70,8 +70,8 @@ into `options` — avoid it. Rules:
   selectable agent (needs a real model + tools). `subagent` = launched via the
   task tool; the main agent talks to the user.
 - `model` — always has a provider prefix: `provider/model`. For this org:
-  `opencode/deepseek-v4-flash-free` (default), `opencode/deepseek-v4-pro:cloud`
-  (more capable/reasoning), `opencode/glm-5.2:cloud`, etc. If unsure which a
+  `opencode/deepseek-v4-flash-free` (default), `ollama/deepseek-v4-pro:cloud`
+  (more capable/reasoning), `ollama/glm-5.2:cloud`, etc. If unsure which a
   role needs, default to `opencode/deepseek-v4-flash-free`. A primary agent
   without `model` inherits the user's default.
 - `permission` — flat action or `{tool: action}` map. Needed to lock down a

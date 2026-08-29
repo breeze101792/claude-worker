@@ -6,7 +6,19 @@
             "sudo *": "ask",
             "rm -rf *": "deny",
             "git commit *": "ask",
-        "git push *": "deny"
+            "git push *": "deny",
+            "git reset --hard*": "deny",
+            "git clean *": "deny",
+            "git filter-branch *": "deny",
+            "git update-ref *": "deny",
+            "git branch -D *": "deny",
+            "git * commit *": "ask",
+            "git * push *": "deny",
+            "git * reset --hard*": "deny",
+            "git * clean *": "deny",
+            "git * filter-branch *": "deny",
+            "git * update-ref *": "deny",
+            "git * branch -D *": "deny"
         },
         "read": {
             "~/.bashrc": "deny",
@@ -19,6 +31,26 @@
         },
         "external_directory": {
             "/tmp/**": "allow"
+        }
+    },
+    "agent": {
+        "build": {
+            "permission": {
+                "task": {
+                    "*": "allow",
+                    "recruiter": "deny"
+                }
+            }
+        },
+        "plan": {
+            "permission": {
+                "task": {
+                    "*": "allow",
+                    "debugger": "deny",
+                    "tester": "deny",
+                    "recruiter": "deny"
+                }
+            }
         }
     },
     "lsp": true,
