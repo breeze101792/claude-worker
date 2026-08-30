@@ -79,12 +79,6 @@
                     "reasoning": true,
                     "limit": { "context": 1048576, "output": 32768 }
                 },
-                "glm-5.2:cloud": {
-                    "name": "GLM 5.2",
-                    "tool_call": true,
-                    "reasoning": true,
-                    "limit": { "context": 1000000, "output": 16384 }
-                },
                 "glm-5.3:cloud": {
                     "name": "GLM 5.3",
                     "tool_call": true,

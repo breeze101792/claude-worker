@@ -1,7 +1,7 @@
 ---
 description: Deep debugging specialist — investigates hard bugs, crashes, stack traces, and mysterious failures; reproduces the problem, finds the root cause, fixes it, and verifies the fix. Use only for serious debugging that needs a powerful reasoning model.
 mode: subagent
-model: ollama/glm-5.2:cloud
+model: ollama/glm-5.3:cloud
 permission:
   bash: allow
   edit: allow
