@@ -1,6 +1,6 @@
 {
     "$schema": "https://opencode.ai/config.json",
-    "model": "ollama/glm-5.3-flash:cloud",
+    "model": "ollama/deepseek-v4-flash:cloud",
     "permission": {
         "bash": {
             "sudo *": "ask",
