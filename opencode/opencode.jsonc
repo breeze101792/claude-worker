@@ -44,6 +44,12 @@
         },
         "plan": {
             "permission": {
+                "edit": {
+                    "docs/**": "allow",
+                    "README.md": "allow",
+                    "AGENTS.md": "allow",
+                    "*": "deny"
+                },
                 "task": {
                     "*": "allow",
                     "debugger": "deny",
